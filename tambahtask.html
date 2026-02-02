@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Upload Task Intern - INTERNETI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --telkom-red: #EE2E24;
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg-light); 
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; width: 100%; }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url('bgdashboard.jpeg');
+            background-size: cover; background-position: center;
+            padding: 40px 50px; border-radius: 30px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: var(--shadow); margin-bottom: 35px; color: white;
+            border-bottom: 5px solid var(--telkom-red);
+        }
+
+        .header-content { display: flex; flex-direction: column; gap: 8px; }
+        .header h1 { font-size: 28px; font-weight: 800; margin-top: 5px; }
+        
+        /* NAVIGASI PINTAR */
+        .nav-group { display: flex; gap: 10px; margin-bottom: 5px; }
+
+        .back-btn {
+            text-decoration: none; color: rgba(255,255,255,0.95); font-weight: 600;
+            display: flex; align-items: center; gap: 8px; transition: 0.3s;
+            font-size: 13px; background: rgba(255,255,255,0.15); padding: 6px 14px;
+            border-radius: 10px; width: fit-content;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); color: white; }
+
+        /* FORM CARD */
+        .form-card {
+            background: white; border-radius: 25px; padding: 40px;
+            box-shadow: var(--shadow); border-left: 10px solid var(--telkom-red);
+        }
+
+        .form-group { margin-bottom: 25px; display: flex; flex-direction: column; gap: 8px; }
+        
+        label { font-size: 14px; font-weight: 700; color: #475569; display: flex; align-items: center; gap: 8px; }
+
+        input, select, textarea {
+            width: 100%; padding: 15px; border: 2px solid #f1f5f9;
+            border-radius: 15px; outline: none; font-family: inherit;
+            background: #f8fafc; font-size: 14px; transition: 0.3s;
+        }
+        textarea { resize: vertical; min-height: 120px; }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--telkom-red); background: white;
+            box-shadow: 0 0 0 4px rgba(238, 46, 36, 0.1);
+        }
+
+        /* FILE UPLOAD */
+        .file-upload-wrapper {
+            position: relative; border: 2px dashed #cbd5e1; padding: 30px;
+            border-radius: 15px; text-align: center; background: #f8fafc;
+            transition: 0.3s; cursor: pointer;
+        }
+        .file-upload-wrapper:hover { border-color: var(--telkom-red); background: #fffcfc; }
+        .file-upload-wrapper i { font-size: 30px; color: #94a3b8; margin-bottom: 10px; }
+        .file-upload-wrapper p { font-size: 13px; color: #64748b; font-weight: 600; }
+        .file-upload-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+
+        .submit-btn {
+            background: var(--telkom-red); color: white; padding: 20px;
+            border: none; border-radius: 20px; font-weight: 800; font-size: 16px;
+            cursor: pointer; width: 100%; display: flex; align-items: center;
+            justify-content: center; gap: 12px; transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(238, 46, 36, 0.2);
+        }
+        .submit-btn:hover { background: #d6281f; transform: translateY(-3px); }
+
+        /* RESPONSIVE */
+        @media screen and (max-width: 768px) {
+            body { padding: 15px; }
+            .header {
+                flex-direction: column; text-align: center; gap: 20px; padding: 30px 20px; align-items: stretch;
+            }
+            .header-content { align-items: center; }
+            .nav-group { justify-content: center; width: 100%; }
+            .header h1 { font-size: 24px; }
+            
+            .form-card { padding: 25px; }
+            .submit-btn { padding: 16px; font-size: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="header-content">
+            <div class="nav-group">
+                <a href="mentorr.html" class="back-btn">
+                    <i class="fa-solid fa-home"></i> Dashboard
+                </a>
+            </div>
+            <h1>Upload <span style="color: #ffcfcf;">Task Baru</span></h1>
+        </div>
+        <i class="fa-solid fa-file-export" style="font-size: 40px; opacity: 0.4;"></i>
+    </div>
+
+    <div class="form-card">
+        <form action="#" method="POST">
+            
+            <div class="form-group">
+                <label><i class="fa-solid fa-user"></i> Pilih Nama Intern</label>
+                <select required>
+                    <option value="">-- Pilih Mahasiswa Intern --</option>
+                    <option value="1">Ahmad Rizky (Universitas Indonesia)</option>
+                    <option value="2">Siti Aminah (Universitas Telkom)</option>
+                    <option value="3">Budi Pratama (ITB)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-heading"></i> Nama / Judul Task</label>
+                <input type="text" placeholder="Contoh: Slicing UI Dashboard Admin" required>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-align-left"></i> Deskripsi Task</label>
+                <textarea placeholder="Jelaskan detail instruksi pengerjaan tugas di sini..." required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-calendar-day"></i> Deadline Tugas</label>
+                <input type="datetime-local" required>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fa-solid fa-paperclip"></i> Lampiran File Task (Opsional)</label>
+                <div class="file-upload-wrapper">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <p>Klik atau Seret file ke sini untuk upload</p>
+                    <input type="file" class="file-upload-input">
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <i class="fa-solid fa-paper-plane"></i> Kirim Task ke Intern
+            </button>
+
+        </form>
+    </div>
+</div>
+
+<script>
+    document.querySelector('.file-upload-input').addEventListener('change', function(e) {
+        if(e.target.files.length > 0){
+            let fileName = e.target.files[0].name;
+            document.querySelector('.file-upload-wrapper p').innerText = "File terpilih: " + fileName;
+            document.querySelector('.file-upload-wrapper').style.borderColor = "#10b981";
+        }
+    });
+</script>
+
+</body>
+</html>

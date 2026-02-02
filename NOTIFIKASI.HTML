@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Notifikasi Mentor - INTERNETI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --telkom-red: #EE2E24;
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg-light); 
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 1000px; margin: 0 auto; width: 100%; }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url('bgdashboard.jpeg');
+            background-size: cover;
+            background-position: center;
+            padding: 30px 40px;
+            border-radius: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center; 
+            box-shadow: var(--shadow);
+            margin-bottom: 35px;
+            color: white;
+            border-bottom: 5px solid var(--telkom-red);
+            position: relative;
+            flex-wrap: wrap; 
+            gap: 20px;
+        }
+
+        .header-left-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .header h1 { font-size: 28px; font-weight: 800; margin: 0; }
+        
+        .nav-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: rgba(255,255,255,0.9);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .back-btn:hover { 
+            background: rgba(255,255,255,0.25); 
+            color: white; 
+            transform: translateY(-2px); 
+        }
+
+        /* --- BUTTONS TRANSPARAN (GLASSMORPHISM) --- */
+        .action-container {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        #default-actions { display: flex; gap: 12px; }
+        #selection-actions { display: none; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+
+        .btn-action {
+            /* Base Style Transparan */
+            background: rgba(255, 255, 255, 0.1); /* Latar belakang transparan */
+            backdrop-filter: blur(10px); /* Efek blur kaca */
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3); /* Border tipis */
+            
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.6); /* Border lebih terang saat hover */
+        }
+
+        /* --- WARNA KHUSUS (TINTED GLASS) --- */
+        /* Biru Transparan */
+        .btn-select {
+            background: rgba(59, 130, 246, 0.25);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+        .btn-select:hover {
+            background: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Hijau Transparan */
+        .btn-mark-all {
+            background: rgba(16, 185, 129, 0.25);
+            border-color: rgba(16, 185, 129, 0.5);
+        }
+        .btn-mark-all:hover {
+            background: rgba(16, 185, 129, 0.5);
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Orange Transparan */
+        .btn-delete {
+            background: rgba(245, 158, 11, 0.25);
+            border-color: rgba(245, 158, 11, 0.5);
+        }
+        .btn-delete:hover {
+            background: rgba(245, 158, 11, 0.5);
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+        }
+
+        /* Merah Transparan */
+        .btn-delete-all {
+            background: rgba(239, 68, 68, 0.25);
+            border-color: rgba(239, 68, 68, 0.5);
+        }
+        .btn-delete-all:hover {
+            background: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Biru Langit Transparan */
+        .btn-mark-sel {
+            background: rgba(14, 165, 233, 0.25);
+            border-color: rgba(14, 165, 233, 0.5);
+        }
+        .btn-mark-sel:hover {
+            background: rgba(14, 165, 233, 0.5);
+            box-shadow: 0 0 15px rgba(14, 165, 233, 0.4);
+        }
+
+        /* Abu Transparan */
+        .btn-cancel {
+            background: rgba(100, 116, 139, 0.3);
+            border-color: rgba(100, 116, 139, 0.5);
+        }
+        .btn-cancel:hover {
+            background: rgba(100, 116, 139, 0.6);
+        }
+
+
+        /* --- CARD STYLE --- */
+        .notif-card {
+            background: white;
+            border-radius: 22px;
+            padding: 22px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center; 
+            gap: 0; 
+            box-shadow: var(--shadow);
+            transition: 0.3s;
+            border-left: 8px solid var(--telkom-red); 
+            cursor: default;
+            position: relative;
+        }
+
+        .notif-card:hover { 
+            transform: translateY(-3px); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+            background-color: #fefefe;
+        }
+        
+        .notif-card.unread { background: #fffafa; }
+
+
+        /* --- CHECKBOX --- */
+        .checkbox-wrapper {
+            width: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Saat Mode Pilih Aktif */
+        body.selection-mode .checkbox-wrapper {
+            width: 45px; /* Lebar area aman */
+            opacity: 1;
+            margin-right: 5px;
+        }
+
+        .select-check {
+            width: 24px; 
+            height: 24px;
+            min-width: 24px;
+            cursor: pointer;
+            accent-color: var(--telkom-red); 
+            margin: 0;
+            -webkit-appearance: auto;
+            appearance: auto;
+        }
+
+
+        /* CONTENT AREA */
+        .card-click-area {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            flex: 1;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .icon-box {
+            width: 55px; height: 55px; border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; flex-shrink: 0;
+        }
+
+        .icon-logbook { background: rgba(238, 46, 36, 0.1); color: var(--telkom-red); }
+        .icon-task { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .icon-user { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .icon-sys { background: #f1f5f9; color: #475569; }
+
+        .notif-content { flex: 1; margin-top: 2px; }
+        .notif-title { font-weight: 700; font-size: 17px; margin-bottom: 4px; color: #0f172a; }
+        .notif-desc { font-size: 14px; color: #64748b; line-height: 1.5; }
+        .notif-time { font-size: 12px; color: #94a3b8; font-weight: 500; margin-top: 10px; display: flex; align-items: center; gap: 5px; }
+
+        .unread-dot {
+            width: 12px; height: 12px; background: var(--telkom-red);
+            border-radius: 50%; margin-left: 10px; flex-shrink: 0; display: block;
+        }
+
+        /* RESPONSIVE MOBILE */
+        @media screen and (max-width: 768px) {
+            body { padding: 15px; }
+            .header {
+                flex-direction: column; text-align: center; gap: 20px; padding: 30px 20px; align-items: stretch;
+            }
+            .header-left-content { align-items: center; }
+            .nav-group { justify-content: center; width: 100%; }
+            
+            #default-actions, #selection-actions { 
+                width: 100%; flex-direction: column; gap: 10px;
+            }
+            .btn-action { justify-content: center; width: 100%; }
+            
+            .notif-card { padding: 15px; }
+            .card-click-area { gap: 15px; }
+            .icon-box { width: 45px; height: 45px; font-size: 18px; }
+            .notif-title { font-size: 15px; }
+            .notif-desc { font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="header-left-content">
+            <div class="nav-group">
+                <a href="mentorr.html" class="back-btn">
+                    <i class="fa-solid fa-home"></i> Dashboard
+                </a>
+            </div>
+            
+            <h1>Pusat <span style="color: #ffcfcf;">Notifikasi</span></h1>
+        </div>
+        
+        <div class="action-container">
+            <div id="default-actions">
+                <button class="btn-action btn-select" onclick="toggleSelectionMode(true)">
+                    <i class="fa-regular fa-square-check"></i> Pilih Notifikasi
+                </button>
+                <button class="btn-action btn-mark-all" onclick="handleRead('all')">
+                    <i class="fa-solid fa-check-double"></i> Tandai Semua Dibaca
+                </button>
+            </div>
+
+            <div id="selection-actions">
+                <button class="btn-action btn-delete" onclick="handleDelete('selected')">
+                    <i class="fa-solid fa-trash"></i> Hapus
+                </button>
+                <button class="btn-action btn-delete-all" onclick="handleDelete('all')">
+                    <i class="fa-solid fa-dumpster-fire"></i> Hapus Semua
+                </button>
+                <button class="btn-action btn-mark-sel" onclick="handleRead('selected')">
+                    <i class="fa-solid fa-envelope-open"></i> Tandai Dibaca
+                </button>
+                <button class="btn-action btn-cancel" onclick="toggleSelectionMode(false)">
+                    <i class="fa-solid fa-xmark"></i> Batal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="notif-list">
+        <div class="notif-card unread">
+            <div class="checkbox-wrapper">
+                <input type="checkbox" class="select-check">
+            </div>
+            <div class="card-click-area" onclick="window.location.href='reviewlogbook.html'">
+                <div class="icon-box icon-logbook">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <div class="notif-content">
+                    <div class="notif-title">Logbook Baru Perlu Review</div>
+                    <div class="notif-desc"><strong>Ahmad Rizky</strong> telah mengirimkan logbook harian. Segera lakukan validasi.</div>
+                    <div class="notif-time"><i class="fa-regular fa-clock"></i> 5 menit yang lalu</div>
+                </div>
+                <div class="unread-dot"></div>
+            </div>
+        </div>
+
+        <div class="notif-card unread">
+            <div class="checkbox-wrapper">
+                <input type="checkbox" class="select-check">
+            </div>
+            <div class="card-click-area" onclick="window.location.href='aktivitas-1.html'">
+                <div class="icon-box icon-task">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                </div>
+                <div class="notif-content">
+                    <div class="notif-title">Tugas Selesai Dikirim</div>
+                    <div class="notif-desc"><strong>Siti Aminah</strong> telah mengunggah file tugas "Integrasi API Login".</div>
+                    <div class="notif-time"><i class="fa-regular fa-clock"></i> 1 jam yang lalu</div>
+                </div>
+                <div class="unread-dot"></div>
+            </div>
+        </div>
+
+        <div class="notif-card">
+            <div class="checkbox-wrapper">
+                <input type="checkbox" class="select-check">
+            </div>
+            <div class="card-click-area" onclick="window.location.href='aktivitas-1.html'">
+                <div class="icon-box icon-user">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+                <div class="notif-content">
+                    <div class="notif-title">Penerimaan Intern Baru</div>
+                    <div class="notif-desc"><strong>Budi Pratama</strong> resmi bergabung di bawah bimbingan Anda.</div>
+                    <div class="notif-time"><i class="fa-regular fa-clock"></i> 3 jam yang lalu</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="notif-card">
+            <div class="checkbox-wrapper">
+                <input type="checkbox" class="select-check">
+            </div>
+            <div class="card-click-area" onclick="alert('Sistem sudah versi terbaru (v2.1)')">
+                <div class="icon-box icon-sys">
+                    <i class="fa-solid fa-circle-info"></i>
+                </div>
+                <div class="notif-content">
+                    <div class="notif-title">Update Sistem Selesai</div>
+                    <div class="notif-desc">Sistem telah diperbarui untuk performa ekspor PDF yang lebih stabil.</div>
+                    <div class="notif-time"><i class="fa-regular fa-clock"></i> Kemarin, 09:00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleSelectionMode(isActive) {
+        const body = document.body;
+        const defaultActions = document.getElementById('default-actions');
+        const selectionActions = document.getElementById('selection-actions');
+
+        if (isActive) {
+            body.classList.add('selection-mode');
+            defaultActions.style.display = 'none';
+            selectionActions.style.display = 'flex';
+        } else {
+            body.classList.remove('selection-mode');
+            defaultActions.style.display = 'flex';
+            selectionActions.style.display = 'none';
+            document.querySelectorAll('.select-check').forEach(cb => cb.checked = false);
+        }
+    }
+
+    function handleRead(type) {
+        let targets;
+        if(type === 'all') {
+            targets = document.querySelectorAll('.notif-card.unread');
+            if(targets.length === 0) return alert("Semua notifikasi sudah dibaca.");
+        } else {
+            const checkedBoxes = document.querySelectorAll('.select-check:checked');
+            if(checkedBoxes.length === 0) return alert("Pilih minimal satu notifikasi.");
+            targets = Array.from(checkedBoxes).map(cb => cb.closest('.notif-card'));
+        }
+
+        targets.forEach(card => {
+            card.classList.remove('unread');
+            const dot = card.querySelector('.unread-dot');
+            if(dot) dot.style.display = 'none';
+        });
+
+        if(type === 'selected') {
+            toggleSelectionMode(false);
+            alert("Status diperbarui.");
+        } else {
+            alert("Semua telah ditandai dibaca.");
+        }
+    }
+
+    function handleDelete(type) {
+        const notifList = document.getElementById('notif-list');
+        
+        if(type === 'all') {
+            if(confirm("Hapus SEMUA notifikasi?")) {
+                notifList.innerHTML = emptyState();
+                toggleSelectionMode(false);
+            }
+        } else {
+            const checkedBoxes = document.querySelectorAll('.select-check:checked');
+            if(checkedBoxes.length === 0) return alert("Pilih item untuk dihapus.");
+
+            if(confirm(`Hapus ${checkedBoxes.length} item?`)) {
+                checkedBoxes.forEach(cb => cb.closest('.notif-card').remove());
+                if(notifList.children.length === 0) notifList.innerHTML = emptyState();
+                toggleSelectionMode(false);
+            }
+        }
+    }
+
+    function emptyState() {
+        return `
+            <div style="text-align: center; padding: 40px; color: #94a3b8;">
+                <i class="fa-solid fa-inbox" style="font-size: 40px; margin-bottom: 10px;"></i>
+                <p>Tidak ada notifikasi baru.</p>
+            </div>
+        `;
+    }
+</script>
+
+</body>
+</html>

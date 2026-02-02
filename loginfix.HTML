@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login - INTERNETI</title>
+    <style>
+        /* RESET CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent; /* Hilangkan highlight biru di mobile */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            /* Fallback color jika gambar gagal load */
+            background-color: #1a1a1a;
+            background-image: url('gambarlogin.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px; /* Jarak aman di pinggir layar HP */
+        }
+
+        /* CONTAINER UTAMA */
+        .login-container {
+            background: rgba(0, 0, 0, 0.6); /* Sedikit lebih gelap agar teks terbaca jelas di HP */
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            padding: 50px 40px;
+            max-width: 450px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            
+            /* Glassmorphism Effect */
+            backdrop-filter: blur(10px); 
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            /* Animasi Pop-Up */
+            animation: popup 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            opacity: 0;
+        }
+
+        @keyframes popup {
+            0% { transform: scale(0.9) translateY(20px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        /* TYPOGRAPHY */
+        .login-header { text-align: center; margin-bottom: 30px; }
+        
+        .login-title { 
+            font-size: 26px; 
+            font-weight: 800; 
+            color: #ffffff; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            margin-bottom: 5px; 
+        }
+        
+        .login-description { 
+            font-size: 14px; 
+            color: #d1d1d1; 
+            margin-bottom: 10px; 
+        }
+        
+        .login-subtitle { 
+            font-size: 20px; 
+            color: #ffffff; 
+            font-weight: 500; 
+            text-align: left; 
+            margin-top: 20px;
+        }
+
+        /* FORM INPUTS */
+        .form-group { margin-bottom: 20px; }
+        
+        .form-group label { 
+            display: block; 
+            color: #ffffff; 
+            font-size: 13px; 
+            font-weight: 600; 
+            margin-bottom: 8px; 
+            text-transform: uppercase; 
+            letter-spacing: 1px; 
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.1); 
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            color: #ffffff;
+            font-size: 16px; /* Penting: 16px mencegah zoom otomatis di iPhone */
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-control::placeholder { color: rgba(255, 255, 255, 0.5); font-size: 14px; }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #EE2E24; /* Highlight warna Telkom saat fokus */
+            box-shadow: 0 0 15px rgba(238, 46, 36, 0.2);
+        }
+
+        /* ROLE SELECTOR */
+        .role-selector { display: flex; gap: 12px; margin-bottom: 25px; margin-top: 15px; }
+        .role-option { flex: 1; position: relative; }
+        .role-option input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+        
+        .role-label {
+            display: block;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.3s;
+            user-select: none;
+        }
+
+        .role-option input[type="radio"]:checked + .role-label {
+            background: #EE2E24; 
+            border-color: #EE2E24;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(238, 46, 36, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* BUTTON */
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            background: #EE2E24;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            background: #c2221a;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(238, 46, 36, 0.4);
+        }
+
+        .btn-login:active { transform: translateY(0); }
+
+        /* ERROR MESSAGE */
+        .error-message {
+            background: rgba(220, 38, 38, 0.2);
+            color: #fca5a5;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            border: 1px solid rgba(220, 38, 38, 0.5);
+            display: none;
+            text-align: center;
+            animation: shake 0.4s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .error-message.show { display: block; }
+
+        /* --- RESPONSIVE UNTUK HP (MOBILE) --- */
+        @media screen and (max-width: 480px) {
+            .login-container {
+                padding: 35px 25px; /* Kurangi padding agar muat di layar sempit */
+                margin-top: 0;
+            }
+
+            .login-title { font-size: 22px; }
+            .login-description { font-size: 12px; }
+            .login-subtitle { font-size: 18px; margin-top: 15px; }
+            
+            .role-label { padding: 10px; font-size: 13px; }
+            
+            /* Pastikan input text tidak terlalu kecil */
+            .form-control { padding: 12px; }
+        }
+
+        /* --- RESPONSIVE UNTUK LANDSCAPE (HP MIRING) --- */
+        @media screen and (max-height: 600px) {
+            body { padding: 40px 20px; align-items: flex-start; } /* Supaya bisa discroll ke bawah */
+            .login-container { margin-bottom: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-header">
+            <h1 class="login-title">INTERNETI</h1>
+            <p class="login-description">Internship Telkom Information</p>
+            <h2 class="login-subtitle">Login</h2>
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            <i class="fa-solid fa-circle-exclamation"></i> Email atau password salah.
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" class="form-control" placeholder="example@telkom.co.id" required autocomplete="email">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" class="form-control" placeholder="Masukkan Password" required>
+            </div>
+
+            <div class="role-selector">
+                <div class="role-option">
+                    <input type="radio" id="roleMentor" name="role" value="mentor">
+                    <label for="roleMentor" class="role-label">Mentor</label>
+                </div>
+                <div class="role-option">
+                    <input type="radio" id="roleInternship" name="role" value="Internship" checked>
+                    <label for="roleInternship" class="role-label">Internship</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-login">Masuk</button>
+        </form>
+    </div>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const btnLogin = document.querySelector('.btn-login');
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Efek Loading pada tombol
+            const originalText = btnLogin.innerText;
+            btnLogin.innerText = "Loading...";
+            btnLogin.style.opacity = "0.7";
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const role = document.querySelector('input[name="role"]:checked').value;
+
+            // Simulasi Delay agar terasa seperti loading
+            setTimeout(() => {
+                // Logika Login Sederhana
+                if (email === 'admin@telkom.co.id' && password === 'admin123') {
+                    // Redirect jika sukses
+                    window.location.href = 'welcomingpage.html'; 
+                } else {
+                    // Tampilkan Error jika gagal
+                    errorMessage.classList.add('show');
+                    btnLogin.innerText = originalText;
+                    btnLogin.style.opacity = "1";
+                    
+                    // Hilangkan pesan error otomatis setelah 3 detik
+                    setTimeout(() => {
+                        errorMessage.classList.remove('show');
+                    }, 3000);
+                }
+            }, 800);
+        });
+    </script>
+</body>
+</html>

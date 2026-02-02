@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Buat Pengumuman - INTERNETI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --telkom-red: #EE2E24;
+            --bg-light: #f8fafc;
+            --text-dark: #1e293b;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg-light); 
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .container { max-width: 900px; margin: 0 auto; width: 100%; }
+
+        /* HEADER */
+        .header {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url('bgdashboard.jpeg');
+            background-size: cover; background-position: center;
+            padding: 40px 50px; border-radius: 30px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: var(--shadow); margin-bottom: 35px; color: white;
+            border-bottom: 5px solid var(--telkom-red);
+        }
+
+        .header-content { display: flex; flex-direction: column; gap: 8px; }
+
+        .header h1 { font-size: 28px; font-weight: 800; margin-top: 5px; }
+        
+        /* NAVIGASI PINTAR */
+        .nav-group { display: flex; gap: 10px; margin-bottom: 5px; }
+
+        .back-btn {
+            text-decoration: none; color: rgba(255,255,255,0.95); font-weight: 600;
+            display: flex; align-items: center; gap: 8px; transition: 0.3s;
+            font-size: 13px; background: rgba(255,255,255,0.15); padding: 6px 14px;
+            border-radius: 10px; width: fit-content;
+        }
+        .back-btn:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); color: white; }
+
+        /* CARD */
+        .main-grid { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        .card {
+            background: white; border-radius: 25px; padding: 35px;
+            box-shadow: var(--shadow); border-left: 10px solid var(--telkom-red);
+        }
+
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 14px; font-weight: 700; color: #475569; margin-bottom: 10px; }
+
+        input, textarea, select {
+            width: 100%; padding: 15px; border: 2px solid #f1f5f9;
+            border-radius: 15px; outline: none; font-family: inherit;
+            background: #f8fafc; font-size: 14px; transition: 0.3s;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--telkom-red); background: white;
+        }
+
+        .type-selector { display: flex; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; }
+        .type-option {
+            flex: 1; padding: 15px; border: 2px solid #f1f5f9;
+            border-radius: 15px; text-align: center; cursor: pointer;
+            transition: 0.3s; font-weight: 700; font-size: 13px; color: #64748b;
+            min-width: 100px;
+        }
+        .type-option i { display: block; font-size: 20px; margin-bottom: 8px; }
+        
+        .type-option.active[data-type="info"] { border-color: var(--telkom-red); color: var(--telkom-red); background: rgba(238, 46, 36, 0.05); }
+        .type-option.active[data-type="rapat"] { border-color: #3b82f6; color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
+        .type-option.active[data-type="libur"] { border-color: #f59e0b; color: #f59e0b; background: rgba(245, 158, 11, 0.05); }
+
+        .submit-btn {
+            background: var(--telkom-red); color: white; padding: 18px;
+            border: none; border-radius: 18px; font-weight: 800; width: 100%;
+            cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(238, 46, 36, 0.2);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .submit-btn:hover { background: #d6281f; transform: translateY(-2px); }
+
+        /* RESPONSIVE */
+        @media screen and (max-width: 768px) {
+            body { padding: 15px; }
+            .header {
+                flex-direction: column; text-align: center; gap: 20px; padding: 30px 20px; align-items: stretch;
+            }
+            .header-content { align-items: center; }
+            .nav-group { justify-content: center; width: 100%; }
+            .header h1 { font-size: 24px; }
+            
+            .card { padding: 25px; }
+            .type-selector { flex-direction: column; } 
+            .type-option { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <div class="header-content">
+            <div class="nav-group">
+                <a href="mentorr.html" class="back-btn">
+                    <i class="fa-solid fa-home"></i> Dashboard
+                </a>
+            </div>
+            <h1>Buat <span style="color: #ffcfcf;">Pengumuman</span></h1>
+        </div>
+        <i class="fa-solid fa-bullhorn" style="font-size: 40px; opacity: 0.4;"></i>
+    </div>
+
+    <div class="main-grid">
+        <div class="card">
+            <form id="announcementForm">
+                <div class="form-group">
+                    <label>Kategori Pengumuman</label>
+                    <div class="type-selector">
+                        <div class="type-option active" data-type="info">
+                            <i class="fa-solid fa-circle-info"></i> Info Umum
+                        </div>
+                        <div class="type-option" data-type="rapat">
+                            <i class="fa-solid fa-users"></i> Rapat / Meeting
+                        </div>
+                        <div class="type-option" data-type="libur">
+                            <i class="fa-solid fa-calendar-check"></i> Libur / Cuti
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Judul Pengumuman</label>
+                    <input type="text" placeholder="Contoh: Jadwal Rapat Evaluasi Mingguan" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Isi Pengumuman</label>
+                    <textarea rows="6" placeholder="Tulis rincian pengumuman di sini..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Ditujukan Kepada</label>
+                    <select>
+                        <option>Semua Intern</option>
+                        <option>Divisi IT Development Saja</option>
+                        <option>Divisi Marketing Saja</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    <i class="fa-solid fa-paper-plane"></i> Publikasikan Pengumuman
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const options = document.querySelectorAll('.type-option');
+    options.forEach(opt => {
+        opt.addEventListener('click', () => {
+            options.forEach(o => o.classList.remove('active'));
+            opt.classList.add('active');
+        });
+    });
+
+    document.getElementById('announcementForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert("Pengumuman berhasil dipublikasikan ke Dashboard Intern!");
+    });
+</script>
+
+</body>
+</html>

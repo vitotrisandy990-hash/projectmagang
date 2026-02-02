@@ -1,0 +1,12 @@
+/* style.css */
+/* Import font Poppins sekali saja, untuk semua halaman */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:root {
+    --font-main: 'Poppins', sans-serif;
+}
+
+/* Terapkan ke seluruh halaman */
+html, body {
+    font-family: var(--font-main);
+}

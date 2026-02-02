@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Selamat Datang di Web Monitoring Telkom Indonesia</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        /* RESET */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            background: url('gambarwelcoming.png') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            position: relative;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px; /* Padding aman untuk HP */
+        }
+
+        /* Overlay */
+        body::before {
+            content: '';
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.6); z-index: 1;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            width: 100%;
+            padding: 40px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: fadeInScale 1s ease-out;
+        }
+
+        .welcome-content h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: #EE2E24;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            line-height: 1.2;
+        }
+
+        .welcome-content p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 15px 35px;
+            background: #EE2E24;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(238, 46, 36, 0.4);
+        }
+
+        .cta-button:hover {
+            background: #d6271e;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(238, 46, 36, 0.6);
+        }
+
+        .footer-info {
+            position: absolute; bottom: 20px; left: 50%;
+            transform: translateX(-50%); z-index: 2;
+            font-size: 0.9em; color: rgba(255, 255, 255, 0.7);
+            width: 100%; padding: 0 10px;
+        }
+
+        /* Floating Objects */
+        .floating-object {
+            position: absolute;
+            background-repeat: no-repeat;
+            background-size: contain;
+            animation: float 10s ease-in-out infinite;
+            pointer-events: none; opacity: 0.3;
+            z-index: 1;
+        }
+        /* Definisikan Icon SVG via CSS agar rapi */
+        .floating-object:nth-child(1) { width: 80px; height: 80px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>'); top: 10%; left: 15%; animation-duration: 12s; }
+        .floating-object:nth-child(2) { width: 100px; height: 100px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 4c-4.41 0-8 3.59-8 8s3.59 8 8 8 8-3.59 8-8-3.59-8-8-8zm0 14c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm1-10H8v2h4c1.1 0 2 .9 2 2s-.9 2-2 2H9v-2H8v3h4c1.66 0 3-1.34 3-3s-1.34-3-3-3z"/></svg>'); top: 25%; right: 20%; animation-duration: 10s; animation-delay: -5s; }
+        .floating-object:nth-child(3) { width: 70px; height: 70px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg>'); bottom: 15%; left: 25%; animation-duration: 14s; animation-delay: -1s; }
+        .floating-object:nth-child(4) { width: 90px; height: 90px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-1 6h2v2h-2V7zm0 4h2v6h-2v-6z"/></svg>'); top: 20%; left: 70%; animation-duration: 11s; animation-delay: -7s; }
+        .floating-object:nth-child(5) { width: 60px; height: 60px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M10 20H8V4h2v16zm6-16h-2v16h2V4zM14 4h-2v16h2V4z"/></svg>'); bottom: 5%; right: 10%; animation-duration: 13s; animation-delay: -3s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(20px, 30px); }
+            100% { transform: translate(0, 0); }
+        }
+        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+        /* RESPONSIVE MOBILE */
+        @media screen and (max-width: 768px) {
+            .welcome-content { padding: 30px 20px; }
+            .welcome-content h1 { font-size: 2.2em; }
+            .welcome-content p { font-size: 1em; }
+            .cta-button { width: 100%; padding: 15px; }
+            /* Sembunyikan floating objects agar tidak menutupi teks di layar kecil */
+            .floating-object { opacity: 0.15; width: 50px !important; height: 50px !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-object"></div>
+    <div class="floating-object"></div>
+    <div class="floating-object"></div>
+    <div class="floating-object"></div>
+    <div class="floating-object"></div>
+
+    <div class="welcome-content">
+        <h1>Telkom Internship Platform</h1>
+        <p>
+            Monitor your progress and contribute to real industry projects.
+        </p>
+        <a href="loginfix.HTML" class="cta-button">
+            Mulai Sekarang <i class="fas fa-arrow-right" style="margin-left: 10px;"></i>
+        </a>
+    </div>
+
+    <div class="footer-info">
+        &copy; 2024 Telkom Indonesia. All Rights Reserved.
+    </div>
+</body>
+</html>

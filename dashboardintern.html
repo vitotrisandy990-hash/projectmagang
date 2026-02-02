@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Intern - TELKOM INDONESIA</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --active-color: #EE2E24; 
+            --telkom-red-dark: rgba(0,0,0,0.5); 
+            --shadow: 0 10px 40px rgba(0,0,0,0.08);
+            --border-radius: 20px;
+            --text-dark: #1e293b;
+            --text-gray: #64748b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; padding: 25px; color: var(--text-dark); line-height: 1.6; }
+        
+        .container { max-width: 1300px; margin: 0 auto; width: 100%; }
+
+        /* HERO SECTION */
+        .hero-section { 
+            background: linear-gradient(var(--telkom-red-dark), var(--telkom-red-dark)), url('bgdashboard.jpeg'); 
+            background-size: cover; background-position: center;
+            padding: 70px 50px; border-radius: 30px; color: white; 
+            display: flex; justify-content: space-between; align-items: center; 
+            margin-bottom: 35px; position: relative; box-shadow: var(--shadow);
+            background-color: #333; /* Fallback color */
+        }
+
+        .logo-top { position: absolute; top: 30px; left: 40px; height: 65px; filter: brightness(0) invert(1); }
+        .user-info h1 { font-size: 36px; font-weight: 800; letter-spacing: -1.5px; text-shadow: 2px 2px 10px rgba(0,0,0,0.2); }
+        .profile-box { text-align: center; }
+        .profile-box img { width: 120px; height: 120px; border-radius: 50%; border: 5px solid rgba(255,255,255,0.3); object-fit: cover; margin-bottom: 10px; cursor: pointer; transition: 0.3s; }
+
+        /* NAVIGATION TABS */
+        .nav-tabs { 
+            background: white; padding: 12px; border-radius: 25px; box-shadow: var(--shadow); 
+            margin-bottom: 35px; display: grid; grid-template-columns: repeat(8, 1fr); gap: 12px; 
+            position: relative; z-index: 10; 
+        }
+        .tab-btn { 
+            background: transparent; border: none; padding: 16px 5px; border-radius: 18px;
+            cursor: pointer; font-size: 14px; font-weight: 700; color: var(--text-gray);
+            transition: 0.4s; display: flex; flex-direction: column; align-items: center; gap: 10px;
+            width: 100%;
+        }
+        .tab-btn.active { background: var(--active-color); color: white; box-shadow: 0 10px 25px rgba(238, 46, 36, 0.2); transform: translateY(-5px); }
+        .btn-logout { color: #EE2E24 !important; }
+
+        /* CARDS & LAYOUTS */
+        .card { background: white; padding: 35px; border-radius: 30px; box-shadow: var(--shadow); margin-bottom: 30px; border: 1px solid rgba(0,0,0,0.02); }
+        .card h3 { font-size: 20px; font-weight: 700; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; color: var(--text-dark); }
+
+        .dashboard-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 30px; }
+        .absensi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .profil-flex { display: flex; gap: 50px; align-items: flex-start; }
+        .profil-left { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .profil-right { flex: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        /* STATUS BOX */
+        .status-box {
+            background: linear-gradient(var(--telkom-red-dark), var(--telkom-red-dark)), url('bgdashboard.jpeg');
+            background-size: cover; background-position: center;
+            color: white; border-radius: 30px; position: relative; overflow: hidden;
+            min-height: 420px; display: flex; align-items: center; padding: 50px;
+            background-color: #EE2E24;
+        }
+        .status-content { position: relative; z-index: 2; width: 70%; }
+        .info-grid { display: grid; grid-template-columns: 150px auto; gap: 10px 0; font-size: 17px; line-height: 1.6; }
+        .person-img { position: absolute; bottom: 0; right: 0; width: 340px; height: auto; z-index: 1; filter: drop-shadow(-10px 10px 20px rgba(0,0,0,0.3)); }
+
+        /* FORM elements */
+        .form-row { margin-bottom: 20px; }
+        .form-row label { display: block; margin-bottom: 10px; font-weight: 700; font-size: 13px; color: #475569; }
+        input, textarea, select { width: 100%; padding: 15px; border: 2px solid #f1f5f9; border-radius: 15px; outline: none; font-family: inherit; background: #f8fafc; color: var(--text-dark); }
+        .submit-btn { background: #10b981; color: white; padding: 18px; border: none; border-radius: 18px; font-weight: 800; cursor: pointer; width: 100%; transition: 0.3s; }
+        
+        /* TABLE Styling */
+        .table-wrapper { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th, td { padding: 18px; border-bottom: 1px solid #f1f5f9; text-align: left; }
+        th { background: #f8fafc; color: #64748b; font-size: 13px; font-weight: 700; text-transform: uppercase; }
+
+        /* BUTTON INSTRUCTION */
+        .btn-instruction {
+            display: inline-flex; align-items: center; gap: 8px;
+            background-color: #e0f2fe; color: #0284c7; padding: 8px 16px;
+            border-radius: 10px; text-decoration: none; font-size: 12px; font-weight: 700;
+            transition: all 0.3s ease; border: 1px solid transparent;
+        }
+        .btn-instruction:hover {
+            background-color: #0284c7; color: white; transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(2, 132, 199, 0.2);
+        }
+
+        /* HISTORY CARD */
+        .history-card {
+            background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 20px; padding: 25px; margin-bottom: 20px;
+            transition: 0.3s; position: relative;
+        }
+        .history-card:hover { border-color: var(--active-color); background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transform: translateY(-3px); }
+        .history-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .badge-status { padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; display: inline-block; }
+        .badge-green { background: #dcfce7; color: #166534; }
+        .badge-yellow { background: #fef9c3; color: #854d0e; }
+        .mentor-comment { background: white; padding: 15px; border-radius: 15px; border-left: 4px solid var(--active-color); margin-top: 15px; font-size: 13px; color: #475569; }
+
+        /* LOGIC VISIBILITY */
+        .content-section { display: none; animation: fadeIn 0.4s ease; }
+        .content-section.active { display: block !important; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ================= MOBILE RESPONSIVE ================= */
+        @media screen and (max-width: 992px) {
+            body { padding: 15px; }
+            
+            .hero-section {
+                flex-direction: column; text-align: center;
+                padding: 100px 20px 40px 20px; gap: 20px;
+            }
+            .logo-top { left: 50%; transform: translateX(-50%); top: 25px; }
+            
+            .nav-tabs {
+                display: flex; overflow-x: auto; padding: 10px; gap: 10px;
+                -webkit-overflow-scrolling: touch; 
+            }
+            .nav-tabs::-webkit-scrollbar { display: none; }
+            .tab-btn { min-width: 90px; flex-shrink: 0; }
+
+            .dashboard-grid, .absensi-grid { grid-template-columns: 1fr; }
+            
+            .status-box {
+                flex-direction: column; text-align: center;
+                padding: 40px 25px 300px 25px; 
+            }
+            .status-content { width: 100%; }
+            .info-grid { grid-template-columns: 1fr; text-align: center; gap: 5px; margin-bottom: 15px; }
+            .person-img { width: 250px; right: 50%; transform: translateX(50%); bottom: -20px; }
+
+            .profil-flex { flex-direction: column; gap: 30px; }
+            .profil-right { grid-template-columns: 1fr; width: 100%; }
+            .profil-left { width: 100%; }
+            
+            .card { padding: 25px 20px; }
+            #absensi-preview-box { min-height: 250px; margin-top: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero-section">
+        <img src="logodashboard.png" alt="Logo" class="logo-top">
+        <div class="user-info">
+            <p style="font-weight: 500; opacity: 0.8; font-size: 14px; text-transform: uppercase; letter-spacing: 2px;">Internship Dashboard</p>
+            <h1 id="hdr-name">Ahmad Rizky</h1>
+            <p id="hdr-univ" style="font-weight: 400; font-size: 18px;"><i class="fa-solid fa-graduation-cap"></i> Universitas Indonesia</p>
+        </div>
+        <div class="profile-box">
+            <img src="https://via.placeholder.com/150" id="disp-img" onclick="showTab('profil')" alt="User">
+            <p style="font-size: 13px; font-weight: 700; cursor: pointer;" onclick="showTab('profil')">EDIT PROFIL</p>
+        </div>
+    </div>
+
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="showTab('dashboard', this)"><i class="fa-solid fa-house"></i>Dashboard</button>
+        <button class="tab-btn" onclick="showTab('absensi', this)"><i class="fa-solid fa-camera"></i>Absensi</button>
+        <button class="tab-btn" onclick="showTab('logbook', this)"><i class="fa-solid fa-pen-to-square"></i>Logbook</button>
+        <button class="tab-btn" onclick="showTab('task', this)"><i class="fa-solid fa-list-check"></i>Task</button>
+        <button class="tab-btn" onclick="showTab('pengumuman', this)"><i class="fa-solid fa-bullhorn"></i>Pengumuman</button>
+        <button class="tab-btn" onclick="showTab('keluhan', this)"><i class="fa-solid fa-circle-exclamation"></i>Keluhan</button>
+        <button class="tab-btn" onclick="showTab('penilaian', this)"><i class="fa-solid fa-file-invoice"></i>Nilai</button>
+        <button class="tab-btn btn-logout" onclick="logout()"><i class="fa-solid fa-right-from-bracket"></i>Logout</button>
+    </div>
+
+    <div id="dashboard" class="content-section active">
+        <div class="dashboard-grid">
+            <div class="status-box">
+                <div class="status-content">
+                    <h3 style="color: white;">Status Penugasan</h3>
+                    <div style="background: white; color: var(--active-color); display: inline-block; padding: 10px 28px; border-radius: 50px; font-weight: 800; font-size: 14px; margin-bottom: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+                        <i class="fa-solid fa-circle-check"></i> AKTIF SEKARANG
+                    </div>
+                    <div class="info-grid">
+                        <span>Divisi</span> <strong>: IT Development</strong>
+                        <span>Mentor</span> <strong>: Heru Wijaya</strong>
+                        <span>Lama Magang</span> <strong>: 6 Bulan</strong>
+                        <span>Awal Mulai</span> <strong>: 01 Januari 2026</strong>
+                        <span>Berakhir</span> <strong>: 30 Juni 2026</strong>
+                        <span style="color: #ffeb3b; opacity: 1;">Sisa Waktu</span> <strong style="color: #ffeb3b;">: 32 Hari Lagi</strong>
+                    </div>
+                </div>
+                <img src="illustrasi.png" alt="Person" class="person-img">
+            </div>
+            
+            <div class="card">
+                <h3><i class="fa-solid fa-chart-line" style="color: var(--active-color);"></i> Performance & Aktivitas</h3>
+                <div style="height: 320px; position: relative; width: 100%;">
+                    <canvas id="chartDash"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="absensi" class="content-section">
+        <div class="card">
+            <h3><i class="fa-solid fa-camera"></i> Presensi Harian</h3>
+            <div class="absensi-grid">
+                <div>
+                    <div class="form-row"><label>Status Kehadiran</label><select><option>Hadir</option><option>Izin</option><option>Sakit</option></select></div>
+                    
+                    <div class="form-row">
+                        <label>Bukti Kehadiran</label>
+                        
+                        <div style="background: #f8fafc; padding: 15px; border: 1px solid #e2e8f0; border-radius: 15px; margin-bottom: 15px;">
+                            <span style="font-size: 13px; font-weight: 700; color: #475569; display: block; margin-bottom: 8px;">1. Upload Dari Galeri</span>
+                            <input type="file" accept="image/*" onchange="previewAbsensi(this)">
+                        </div>
+
+                        <div style="background: #fff1f2; padding: 15px; border: 1px solid #fecdd3; border-radius: 15px;">
+                            <span style="font-size: 13px; font-weight: 700; color: #be123c; display: block; margin-bottom: 8px;">2. Ambil Foto Langsung (Webcam)</span>
+                            
+                            <div id="camera-container" style="display:none; margin-bottom: 10px; position: relative; border-radius: 15px; overflow: hidden;">
+                                <video id="video-webcam" style="width: 100%; border-radius: 15px; transform: scaleX(-1);" autoplay playsinline></video>
+                                <canvas id="canvas-webcam" style="display:none;"></canvas>
+                            </div>
+
+                            <div id="btn-camera-group">
+                                <button type="button" onclick="startWebcam()" id="btn-start" style="background: #EE2E24; color: white; width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s;">
+                                    <i class="fa-solid fa-camera"></i> Buka Kamera
+                                </button>
+
+                                <button type="button" onclick="takeSnapshot()" id="btn-snap" style="display:none; background: #10b981; color: white; width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: 700; cursor: pointer; align-items: center; justify-content: center; gap: 10px;">
+                                    <i class="fa-solid fa-camera-retro"></i> Jepret Foto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="submit-btn" style="margin-top: 20px;" onclick="alert('Presensi Berhasil Dikirim!')">Kirim Presensi</button>
+                </div>
+                
+                <div id="absensi-preview-box" style="background: #f1f5f9; border-radius: 25px; border: 2px dashed #cbd5e1; display: flex; align-items: center; justify-content: center; flex-direction: column; color: #64748b; height: 100%; min-height: 200px; overflow: hidden;">
+                    <i class="fa-solid fa-image" style="font-size: 45px; margin-bottom: 15px; opacity: 0.5;"></i>
+                    <p style="font-weight: 600;">Preview Foto Presensi</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="logbook" class="content-section">
+        <div class="card">
+            <h3><i class="fa-solid fa-pen-to-square"></i> Input Logbook Aktivitas</h3>
+            <div class="form-row"><label>Apa yang Anda kerjakan hari ini?</label><textarea rows="5" placeholder="Contoh: Mengerjakan slicing dashboard UI..."></textarea></div>
+            <div class="form-row"><label>Upload Bukti Pendukung (Opsional)</label><input type="file"></div>
+            <button class="submit-btn" style="background: var(--active-color);">Simpan Logbook</button>
+        </div>
+
+        <div class="card">
+            <h3><i class="fa-solid fa-clipboard-check"></i> Riwayat & Ulasan Logbook</h3>
+            
+            <div class="history-card">
+                <div class="history-header">
+                    <span style="font-weight: 800; color: #1e293b;">Logbook Minggu Ke-2</span>
+                    <span class="badge-status badge-green"><i class="fa-solid fa-check"></i> Direview</span>
+                </div>
+                <p style="font-size: 14px; color: #64748b;">Melakukan setup environment React JS dan instalasi library Tailwind CSS.</p>
+                <div class="mentor-comment">
+                    <strong style="display: block; margin-bottom: 5px;"><i class="fa-solid fa-comment-dots"></i> Komentar Mentor:</strong>
+                    "Setup sudah bagus, pastikan struktur folder mengikuti standar project ya."
+                </div>
+            </div>
+
+            <div class="history-card">
+                <div class="history-header">
+                    <span style="font-weight: 800; color: #1e293b;">Logbook Minggu Ke-1</span>
+                    <span class="badge-status badge-green"><i class="fa-solid fa-check"></i> Direview</span>
+                </div>
+                <p style="font-size: 14px; color: #64748b;">Pengenalan lingkungan kerja dan tools yang digunakan divisi IT.</p>
+                <div class="mentor-comment">
+                    <strong style="display: block; margin-bottom: 5px;"><i class="fa-solid fa-comment-dots"></i> Komentar Mentor:</strong>
+                    "Selamat datang! Jangan ragu bertanya jika ada kendala akses VPN."
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="task" class="content-section">
+        
+        <div class="card">
+            <h3><i class="fa-solid fa-inbox"></i> Tugas Dari Mentor</h3>
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Berikut adalah daftar tugas yang diberikan oleh mentor. Silakan unduh instruksi untuk mulai mengerjakan.</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nama Task</th>
+                            <th>Instruksi & File</th>
+                            <th>Deadline</th>
+                            <th>Status Pengerjaan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Slicing UI Dashboard</td>
+                            <td>
+                                <a href="soal-dashboard.pdf" download class="btn-instruction">
+                                    <i class="fa-solid fa-file-arrow-down"></i> Unduh Soal
+                                </a>
+                            </td>
+                            <td>20 Jan 2026</td>
+                            <td><span style="color: #f59e0b; font-weight: 700;">Belum Dikumpulkan</span></td>
+                        </tr>
+                        <tr>
+                            <td>Integrasi API Login</td>
+                            <td>
+                                <a href="#" class="btn-instruction">
+                                    <i class="fa-solid fa-file-arrow-down"></i> Unduh Soal
+                                </a>
+                            </td>
+                            <td>22 Jan 2026</td>
+                            <td><span style="color: #10b981; font-weight: 700;">Sudah Dikumpulkan</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3><i class="fa-solid fa-paper-plane" style="color: #10b981;"></i> Upload / Pengiriman Tugas</h3>
+            <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Gunakan form ini untuk mengirimkan hasil pengerjaan tugas Anda kepada mentor.</p>
+            
+            <div class="form-row">
+                <label>Pilih Tugas</label>
+                <select>
+                    <option>Slicing UI Dashboard (Deadline: 20 Jan)</option>
+                    <option>Integrasi API Login (Selesai)</option>
+                </select>
+            </div>
+            
+            <div class="form-row">
+                <label>Link Repository / File Hasil</label>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="task-filename" placeholder="Paste link Github/Drive atau Upload File..." style="flex: 1;">
+                    <input type="file" id="hidden-task-file" style="display: none;" onchange="updateTaskFileName(this)">
+                    <button type="button" onclick="document.getElementById('hidden-task-file').click()" 
+                            style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 12px; padding: 0 20px; font-weight: 700; color: #475569; cursor: pointer; transition: 0.3s;">
+                        <i class="fa-solid fa-paperclip"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label>Catatan Tambahan (Opsional)</label>
+                <textarea rows="3" placeholder="Contoh: Fitur login sudah aman, tapi animasi masih perlu perbaikan..."></textarea>
+            </div>
+
+            <button class="submit-btn" style="background: #10b981;">
+                <i class="fa-solid fa-upload"></i> Kirim Tugas Sekarang
+            </button>
+
+            <div style="margin-top: 30px;">
+                <h4 style="margin-bottom: 15px; font-size: 16px;">Riwayat Pengiriman Saya</h4>
+                <div style="background: #f8fafc; border-radius: 15px; padding: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0;">
+                    <div>
+                        <div style="font-weight: 700; font-size: 14px;">Integrasi API Login</div>
+                        <div style="font-size: 12px; color: #64748b;">Dikirim: 18 Jan 2026, 14:30 WIB</div>
+                    </div>
+                    <span class="badge-status badge-green">Terkirim</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pengumuman" class="content-section">
+        <div class="card">
+            <h3 style="border-bottom: 2px solid #f1f5f9; padding-bottom: 15px; margin-bottom: 20px;">
+                <i class="fa-solid fa-bullhorn" style="color: #f59e0b;"></i> Pengumuman Terbaru
+            </h3>
+
+            <div class="history-card" style="border-left: 5px solid #3b82f6;">
+                <div class="history-header">
+                    <span style="font-weight: 800; color: #1e293b; font-size: 16px;">Rapat Evaluasi Mingguan</span>
+                    <span style="font-size: 12px; color: #64748b;"><i class="fa-regular fa-clock"></i> 2 Jam yang lalu</span>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <span class="badge-status" style="background: #eff6ff; color: #1d4ed8;"><i class="fa-solid fa-users"></i> Meeting</span>
+                </div>
+                <p style="font-size: 14px; color: #475569; line-height: 1.6;">
+                    Diharapkan seluruh intern divisi IT Development untuk berkumpul di Ruang Meeting 2 pada pukul 14:00 WIB untuk evaluasi progress mingguan.
+                </p>
+            </div>
+
+            <div class="history-card" style="border-left: 5px solid #EE2E24;">
+                <div class="history-header">
+                    <span style="font-weight: 800; color: #1e293b; font-size: 16px;">Maintenance Server</span>
+                    <span style="font-size: 12px; color: #64748b;"><i class="fa-regular fa-calendar"></i> Kemarin</span>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <span class="badge-status" style="background: #fef2f2; color: #b91c1c;"><i class="fa-solid fa-circle-info"></i> Info Penting</span>
+                </div>
+                <p style="font-size: 14px; color: #475569; line-height: 1.6;">
+                    Server development akan mengalami downtime pada hari Sabtu pukul 22:00 - 24:00 WIB untuk pemeliharaan rutin. Harap simpan pekerjaan Anda sebelum waktu tersebut.
+                </p>
+            </div>
+
+            <div class="history-card" style="border-left: 5px solid #10b981;">
+                <div class="history-header">
+                    <span style="font-weight: 800; color: #1e293b; font-size: 16px;">Libur Cuti Bersama</span>
+                    <span style="font-size: 12px; color: #64748b;"><i class="fa-regular fa-calendar"></i> 3 Hari yang lalu</span>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <span class="badge-status" style="background: #ecfdf5; color: #047857;"><i class="fa-solid fa-calendar-check"></i> Libur</span>
+                </div>
+                <p style="font-size: 14px; color: #475569; line-height: 1.6;">
+                    Sehubungan dengan hari raya, maka kegiatan magang diliburkan pada tanggal 25-26 Januari 2026. Masuk kembali pada tanggal 27 Januari.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="keluhan" class="content-section">
+        <div class="card">
+            <h3><i class="fa-solid fa-circle-exclamation"></i> Pusat Bantuan</h3>
+            <div class="form-row"><label>Subjek Keluhan</label><input type="text"></div>
+            <div class="form-row"><label>Detail</label><textarea rows="4"></textarea></div>
+            <button class="submit-btn" style="background: #1e293b;">Kirim Aduan</button>
+        </div>
+    </div>
+
+    <div id="penilaian" class="content-section">
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 10px;">
+                <h3><i class="fa-solid fa-file-invoice"></i> Rekap Nilai Akhir</h3>
+                <button id="btn-export" class="submit-btn" style="width: auto; padding: 12px 25px; background: #1e293b;" onclick="downloadPDF()">Export ke PDF</button>
+            </div>
+            
+            <div class="table-wrapper">
+                <div id="pdf-area" style="padding: 40px; background: white; color: #1e293b; border: 1px solid #eee; border-radius: 15px; width: 100%; max-width: 800px; margin: 0 auto; min-width: 700px;">
+                    <div style="text-align: center; margin-bottom: 40px; border-bottom: 3px solid #EE2E24; padding-bottom: 20px;">
+                        <h2 style="letter-spacing: 2px; color: #EE2E24; margin-bottom: 5px;">TRANSKRIP NILAI INTERNSHIP</h2>
+                        <p style="font-size: 14px; color: #64748b;">PT Telkom Indonesia (Persero) Tbk</p>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; background: #f8fafc; padding: 25px; border-radius: 12px;">
+                        <div><p style="font-size: 13px; color: #64748b; margin-bottom: 4px;">Nama Peserta</p><p style="font-weight: 700; font-size: 16px;" id="pdf-name">Ahmad Rizky</p></div>
+                        <div><p style="font-size: 13px; color: #64748b; margin-bottom: 4px;">Divisi</p><p style="font-weight: 700; font-size: 16px;">IT Development</p></div>
+                        <div><p style="font-size: 13px; color: #64748b; margin-bottom: 4px;">Nama Mentor</p><p style="font-weight: 700; font-size: 16px;">Heru Wijaya</p></div>
+                        <div><p style="font-size: 13px; color: #64748b; margin-bottom: 4px;">Periode</p><p style="font-weight: 700; font-size: 16px;">Januari - Juni 2026</p></div>
+                    </div>
+
+                    <table style="width: 100%; border-collapse: collapse; border: 1px solid #e2e8f0;">
+                        <thead style="background: #1e293b;">
+                            <tr>
+                                <th style="padding: 15px; text-align: left; color: #050505 !important; border: 1px solid #1e293b;">Aspek Penilaian</th>
+                                <th style="padding: 15px; text-align: center; color: #050505 !important; border: 1px solid #1e293b; width: 120px;">Skor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td style="padding: 15px; border: 1px solid #0d0d0e;">Kehadiran (Presensi)</td><td style="padding: 15px; text-align: center; font-weight: 700; border: 1px solid #0d0d0e;">95</td></tr>
+                            <tr><td style="padding: 15px; border: 1px solid #0d0d0e;">Kedisiplinan & Sikap</td><td style="padding: 15px; text-align: center; font-weight: 700; border: 1px solid #0d0d0e;">90</td></tr>
+                            <tr><td style="padding: 15px; border: 1px solid #0d0d0e;">Laporan Kerja (Logbook)</td><td style="padding: 15px; text-align: center; font-weight: 700; border: 1px solid #0d0d0e;">88</td></tr>
+                            <tr><td style="padding: 15px; border: 1px solid #0d0d0e;">Komunikasi</td><td style="padding: 15px; text-align: center; font-weight: 700; border: 1px solid #0d0d0e;">92</td></tr>
+                            <tr><td style="padding: 15px; border: 1px solid #0d0d0e;">Kerjasama Tim (Teamwork)</td><td style="padding: 15px; text-align: center; font-weight: 700; border: 1px solid #0d0d0e;">94</td></tr>
+                            <tr style="background: #f8fafc;">
+                                <td style="padding: 18px; font-weight: 800; border: 1px solid #0d0d0e; font-size: 16px;">Rata-Rata Nilai Akhir</td>
+                                <td style="padding: 18px; text-align: center; font-weight: 800; color: #EE2E24; border: 1px solid #0d0d0e; font-size: 16px;">91.8 (A)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div style="margin-top: 50px; text-align: right; padding-right: 20px;">
+                        <p style="font-size: 14px; margin-bottom: 60px;">Jakarta, 16 Januari 2026</p>
+                        <p style="font-weight: 700; margin-bottom: 5px;">( Bpk. Heru Wijaya )</p>
+                        <p style="font-size: 12px; color: #64748b;">Mentor IT Development</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="profil" class="content-section">
+        <div class="card">
+            <h3><i class="fa-solid fa-user-edit" style="color: var(--active-color);"></i>Informasi Profil</h3>
+            <div class="profil-flex">
+                <div class="profil-left">
+                    <img src="https://via.placeholder.com/150" id="profile-pic" style="width: 180px; height: 180px; border-radius: 40px; border: 8px solid #f8fafc; object-fit: cover; margin-bottom: 20px; box-shadow: var(--shadow);">
+                    <input type="file" id="file-input" style="display:none" onchange="updatePhoto(this)">
+                    <button onclick="document.getElementById('file-input').click()" style="background: #64748b; color: white; border: none; padding: 12px 25px; border-radius: 15px; cursor: pointer; font-weight: 700; width: fit-content;">Ganti Foto Profil</button>
+                </div>
+                <div class="profil-right">
+                    <div class="form-row"><label>Nama Lengkap</label><input type="text" id="in-name" value="Ahmad Rizky"></div>
+                    <div class="form-row"><label>Universitas</label><input type="text" id="in-univ" value="Universitas Indonesia"></div>
+                    <div class="form-row"><label>NIM / ID Intern</label><input type="text" value="1202204123"></div>
+                    <div class="form-row"><label>Divisi Saat Ini</label><input type="text" value="IT Development"></div>
+                    <div class="form-row"><label>Nama Mentor</label><input type="text" value="Bpk. Heru Wijaya"></div>
+                    <div class="form-row"><label>Tanggal Berakhir</label><input type="date" value="2026-06-30"></div>
+                </div>
+            </div>
+            <button class="submit-btn" style="margin-top:20px; background: var(--active-color);" onclick="saveProfile()">Simpan Perubahan Data</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showTab(tabId, btn) {
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        const target = document.getElementById(tabId);
+        if(target) target.classList.add('active');
+        if(btn) btn.classList.add('active');
+        if(tabId === 'dashboard') initChart();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // --- UPDATE: FUNGSI GRAFIK BARU (STYLE MENTOR) ---
+    function initChart() {
+        const canvas = document.getElementById('chartDash');
+        if(!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (window.myChart) window.myChart.destroy();
+        
+        window.myChart = new Chart(ctx, {
+            type: 'line', 
+            data: {
+                labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4', 'Minggu 5', 'Minggu 6', 'Minggu 7', 'Minggu 8'],
+                datasets: [
+                    {
+                        label: 'Skor Performa',
+                        data: [78, 82, 80, 85, 88, 92, 90, 95],
+                        borderColor: '#EE2E24',
+                        backgroundColor: 'rgba(238, 46, 36, 0.15)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        yAxisID: 'y1', // Axis Kanan (Persen)
+                        pointBackgroundColor: '#EE2E24',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    },
+                    {
+                        label: 'Tugas Selesai',
+                        type: 'bar',
+                        data: [2, 3, 4, 3, 5, 4, 5, 6],
+                        backgroundColor: '#1e293b',
+                        borderRadius: 4,
+                        barThickness: 12,
+                        yAxisID: 'y', // Axis Kiri (Jumlah)
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 20,
+                            font: {
+                                family: "'Plus Jakarta Sans', sans-serif",
+                                size: 12,
+                                weight: '600'
+                            },
+                            color: '#64748b'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                        titleColor: '#1e293b',
+                        bodyColor: '#1e293b',
+                        borderColor: '#e2e8f0',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: true,
+                        usePointStyle: true,
+                        titleFont: { size: 13, weight: 'bold' },
+                        bodyFont: { size: 12 }
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        beginAtZero: true,
+                        max: 10,
+                        title: {
+                            display: true,
+                            text: 'Jumlah Task',
+                            font: { size: 11, weight: 'bold', color: '#94a3b8' }
+                        },
+                        grid: {
+                            borderDash: [4, 4],
+                            color: '#f1f5f9'
+                        },
+                        ticks: { color: '#64748b', font: { size: 11 } }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        min: 0,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Performa (%)',
+                            font: { size: 11, weight: 'bold', color: '#94a3b8' }
+                        },
+                        grid: {
+                            drawOnChartArea: false
+                        },
+                        ticks: {
+                            callback: function(value) { return value + '%' },
+                            color: '#64748b', font: { size: 11 }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: { color: '#64748b', font: { size: 11, weight: '600' } }
+                    }
+                }
+            }
+        });
+    }
+
+    function updatePhoto(input) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                document.getElementById('disp-img').src = e.target.result;
+                document.getElementById('profile-pic').src = e.target.result;
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function previewAbsensi(input) {
+        const previewBox = document.getElementById('absensi-preview-box');
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = e => {
+                previewBox.innerHTML = `
+                    <img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+                    <p style="margin-top: 10px; font-weight: 700; color: #10b981; font-size: 12px;"><i class="fa-solid fa-check-circle"></i> Foto Terambil</p>
+                `;
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function updateTaskFileName(input) {
+        if (input.files && input.files[0]) {
+            document.getElementById('task-filename').value = "File: " + input.files[0].name;
+        }
+    }
+
+    function saveProfile() {
+        const nameInput = document.getElementById('in-name').value;
+        const univInput = document.getElementById('in-univ').value;
+        document.getElementById('hdr-name').innerText = nameInput;
+        document.getElementById('pdf-name').innerText = nameInput;
+        document.getElementById('hdr-univ').innerHTML = `<i class="fa-solid fa-graduation-cap"></i> ${univInput}`;
+        alert("Profil Berhasil Diperbarui!");
+    }
+
+    function downloadPDF() {
+        const element = document.getElementById('pdf-area');
+        const btn = document.getElementById('btn-export');
+        
+        const originalStyle = element.getAttribute('style');
+        const originalBtnText = btn.innerText;
+
+        btn.innerText = "Mengolah...";
+        btn.disabled = true;
+
+        element.style.width = "100%";  
+        element.style.maxWidth = "none";
+        element.style.margin = "0";
+        element.style.border = "none";
+        element.style.borderRadius = "0";
+        element.style.padding = "30px";
+        element.style.display = "block";
+
+        const opt = {
+            margin:       [10, 10, 10, 10], 
+            filename:     'Rekap_Nilai_Intern.pdf',
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true, letterRendering: true, scrollY: 0 }, 
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(element).save()
+        .then(() => {
+            element.setAttribute('style', originalStyle);
+            btn.innerText = originalBtnText;
+            btn.disabled = false;
+        })
+        .catch(err => {
+            console.error(err);
+            element.setAttribute('style', originalStyle);
+            btn.innerText = originalBtnText;
+            btn.disabled = false;
+        });
+    }
+
+    function logout() {
+        if (confirm("Apakah Anda yakin ingin keluar dari Dashboard?")) {
+            alert("Anda telah logout.");
+            window.location.reload(); 
+        }
+    }
+
+    // --- SCRIPT TAMBAHAN: FITUR WEBCAM LAPTOP ---
+    let videoStream;
+
+    function startWebcam() {
+        const video = document.getElementById('video-webcam');
+        const container = document.getElementById('camera-container');
+        const btnStart = document.getElementById('btn-start');
+        const btnSnap = document.getElementById('btn-snap');
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                videoStream = stream;
+                video.srcObject = stream;
+                
+                container.style.display = 'block';
+                btnStart.style.display = 'none';
+                btnSnap.style.display = 'flex';
+            })
+            .catch(err => {
+                alert("Gagal membuka kamera. Pastikan browser diizinkan mengakses kamera.");
+                console.error(err);
+            });
+    }
+
+    function takeSnapshot() {
+        const video = document.getElementById('video-webcam');
+        const canvas = document.getElementById('canvas-webcam');
+        const previewBox = document.getElementById('absensi-preview-box');
+        const btnStart = document.getElementById('btn-start');
+        const btnSnap = document.getElementById('btn-snap');
+        const container = document.getElementById('camera-container');
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+
+        const ctx = canvas.getContext('2d');
+        ctx.translate(canvas.width, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const dataURL = canvas.toDataURL('image/png');
+
+        previewBox.innerHTML = `
+            <img src="${dataURL}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 20px;">
+            <p style="margin-top: 10px; font-weight: 700; color: #10b981; font-size: 12px;"><i class="fa-solid fa-check-circle"></i> Foto Terambil</p>
+        `;
+
+        stopWebcam();
+
+        container.style.display = 'none';
+        btnStart.style.display = 'flex';
+        btnStart.innerHTML = '<i class="fa-solid fa-rotate-right"></i> Foto Ulang';
+        btnSnap.style.display = 'none';
+    }
+
+    function stopWebcam() {
+        if (videoStream) {
+            videoStream.getTracks().forEach(track => track.stop());
+        }
+    }
+
+    window.onload = initChart;
+</script>
+</body>
+</html>
